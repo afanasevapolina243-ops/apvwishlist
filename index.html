@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wish List 🌸</title>
+  <style>
+    body {
+      font-family: "Poppins", sans-serif;
+      background: linear-gradient(135deg, #ffe6f2, #e6f7ff);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    h1 {
+      margin-top: 40px;
+      color: #ff66b2;
+      font-size: 2.5em;
+      text-shadow: 1px 1px 3px #fff;
+    }
+
+    .container {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      padding: 30px;
+      width: 90%;
+      max-width: 500px;
+      margin-top: 20px;
+      position: relative;
+    }
+
+    .flowers {
+      position: absolute;
+      top: -25px;
+      right: -25px;
+      font-size: 2.5em;
+    }
+
+    input {
+      width: 75%;
+      padding: 10px;
+      border: 2px solid #ff99cc;
+      border-radius: 10px;
+      outline: none;
+      font-size: 1em;
+    }
+
+    button {
+      padding: 10px 15px;
+      background: #ff80bf;
+      border: none;
+      color: white;
+      font-size: 1em;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #ff66b2;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin-top: 20px;
+    }
+
+    li {
+      background: #fff0f5;
+      border-left: 5px solid #ff80bf;
+      margin-bottom: 10px;
+      padding: 10px;
+      border-radius: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .delete {
+      background: none;
+      border: none;
+      color: #ff4d94;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 1.1em;
+    }
+  </style>
+</head>
+<body>
+  <h1>🌸 Wish List 🌸</h1>
+  <div class="container">
+    <div class="flowers">🌷🌼</div>
+    <input id="wishInput" type="text" placeholder="Напиши своє бажання..." />
+    <button onclick="addWish()">Додати</button>
+    <ul id="wishList"></ul>
+  </div>
+
+  <script>
+    const wishInput = document.getElementById("wishInput");
+    const wishList = document.getElementById("wishList");
+
+    // Завантаження бажань із localStorage
+    document.addEventListener("DOMContentLoaded", loadWishes);
+
+    function addWish() {
+      const wish = wishInput.value.trim();
+      if (wish === "") return;
+
+      const li = document.createElement("li");
+      li.innerHTML = `${wish} <button class="delete" onclick="deleteWish(this)">✖</button>`;
+      wishList.appendChild(li);
+
+      saveWishes();
+      wishInput.value = "";
+    }
+
+    function deleteWish(button) {
+      button.parentElement.remove();
+      saveWishes();
+    }
+
+    function saveWishes() {
+      const wishes = [];
+      wishList.querySelectorAll("li").forEach(li => {
+        wishes.push(li.textContent.replace("✖", "").trim());
+      });
+      localStorage.setItem("wishes", JSON.stringify(wishes));
+    }
+
+    function loadWishes() {
+      const stored = JSON.parse(localStorage.getItem("wishes")) || [];
+      stored.forEach(wish => {
+        const li = document.createElement("li");
+        li.innerHTML = `${wish} <button class="delete" onclick="deleteWish(this)">✖</button>`;
+        wishList.appendChild(li);
+      });
+    }
+  </script>
+</body>
+</html>
+
